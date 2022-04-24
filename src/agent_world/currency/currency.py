@@ -34,7 +34,7 @@ class Currency:
 
     def validate(self, ticker):
         """
-        Returns true if and only if the given ticker is equal to this currencies ticker
+        Returns true if and only if the given ticker is equal to that of this currency
         :param ticker: Any
         :return: Bool
         """

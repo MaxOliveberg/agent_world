@@ -1,9 +1,10 @@
 import unittest
 
-from src.agent_world.currency.currency import Wallet, Currency, UnsupportedCurrencyException, InsufficientBalanceException
+from src.agent_world.currency.currency import Wallet, Currency, UnsupportedCurrencyException, \
+    InsufficientBalanceException
 
 
-class TestCurrency(unittest.TestCase):
+class TestWallet(unittest.TestCase):
     # Todo: Add negative currency exception clock_tests
     def test_deposit_no_whitelist(self):
         wallet = Wallet()
@@ -53,6 +54,26 @@ class TestCurrency(unittest.TestCase):
         except InsufficientBalanceException:
             self.assertTrue(True)
 
+    def test_can_afford(self):
+        wallet = Wallet()
+        currency_usd = Currency(1, "USD")
+        currency_sek = Currency(1, "SEK")
+        wallet.deposit_currency(currency_usd)
+        wallet.deposit_currency(currency_sek)
+        self.assertTrue(wallet.can_afford({"USD": 1, "SEK": 1}), "Returns false despite having a sufficient balance")
+        self.assertFalse(wallet.can_afford({"USD": 2, "SEK": 1}),
+                         "Returns true despite not having a sufficient balance")
+
+    def test_subtract(self):
+        wallet = Wallet()
+        currency_usd = Currency(2, "USD")
+        currency_sek = Currency(2, "SEK")
+        wallet.deposit_currency(currency_usd)
+        wallet.deposit_currency(currency_sek)
+        wallet.subtract({"USD": 1, "SEK": 1})
+        self.assertEqual(1, wallet.check_balance("USD"), "Incorrect USD amountl")
+        self.assertEqual(1, wallet.check_balance("SEK"), "Incorrect SEK amount")
+
     def runTest(self):
         self.test_withdrawal()
         self.test_insufficient_balance()
@@ -60,6 +81,8 @@ class TestCurrency(unittest.TestCase):
         self.test_invalid_withdrawal_whitelist()
         self.test_deposit_no_whitelist()
         self.test_invalid_deposit_whitelist()
+        self.test_can_afford()
+        self.test_subtract()
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ class StatisticsHandler:
         raise NotImplementedError
 
 
-class WorldDataHandler:
+class Blackboard:
 
     def set_value(self, identifier, timestamp, value):
         raise NotImplementedError

@@ -1,8 +1,12 @@
 from src.agent_world.statistics.handler.max_statistics_handler import MaxStatisticsHandler
-from src.agent_world.statistics.handler.statistics_handler import StatisticsHandler, WorldDataHandler
+from src.agent_world.statistics.handler.statistics_handler import StatisticsHandler, Blackboard
 
 
-class StatisticsWrapper(StatisticsHandler, WorldDataHandler):
+class StatisticsWrapper(StatisticsHandler, Blackboard):
+
+    def dispose(self):
+        self.__stat_handler = None
+        self.__data_handler = None
 
     def set_value(self, identifier, timestamp, value):
         if self.__data_handler:
@@ -16,7 +20,7 @@ class StatisticsWrapper(StatisticsHandler, WorldDataHandler):
         self.__stat_handler = None
         self.__data_handler = None
 
-    def configure(self, stat_handler: StatisticsHandler, data_handler: WorldDataHandler):
+    def configure(self, stat_handler: StatisticsHandler, data_handler: Blackboard):
         self.__stat_handler = stat_handler
         self.__data_handler = data_handler
 
@@ -49,3 +53,7 @@ def initialise_statistics(stat_handler_type="max"):
     if stat_handler_type == "max":
         new_handler = MaxStatisticsHandler()
         statistics_manager.configure(new_handler, new_handler)
+
+def dispose():
+    global statistics_manager
+    statistics_manager.dispose()

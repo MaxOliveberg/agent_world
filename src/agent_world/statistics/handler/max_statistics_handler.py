@@ -1,4 +1,4 @@
-from src.agent_world.statistics.handler.statistics_handler import StatisticsHandler, WorldDataHandler
+from src.agent_world.statistics.handler.statistics_handler import StatisticsHandler, Blackboard
 
 
 def _contained(big, small):
@@ -8,7 +8,7 @@ def _contained(big, small):
     return True
 
 
-class MaxStatisticsHandler(StatisticsHandler, WorldDataHandler):
+class MaxStatisticsHandler(StatisticsHandler, Blackboard):
     def set_value(self, identifier, timestamp, value):
         self.log({"name": "Value set", "identifier": identifier, "timestamp": timestamp, "value": value})
         self.__world_data_dict[identifier] = value
