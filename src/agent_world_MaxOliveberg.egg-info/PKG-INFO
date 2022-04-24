@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: agent-world-MaxOliveberg
-Version: 0.1.0
+Version: 0.1.1
 Summary: Some classes to facilitate agent based simulations of idle type games.
-Home-page: https://github.com/pypa/sampleproject
+Home-page: https://github.com/MaxOliveberg/agent_world
 Author: Max Oliveberg
 Author-email: max.oliveberg@gmail.com
 License: UNKNOWN
-Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
+Project-URL: Bug Tracker, https://github.com/MaxOliveberg/agent_world/issues
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
