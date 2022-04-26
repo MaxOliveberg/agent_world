@@ -7,28 +7,87 @@ class AlreadySubscribedToClockException(Exception):
 
 
 class IClockDelegate:
+    """
+    Delegate for the IClock interface
+
+    Methods:
+        set_time(self, time)
+            Sets the time of this delegate
+    """
     def set_time(self, time):
         raise NotImplementedError
 
 
 class IClock:
     # todo: This is essentially a listener pattern and could be abstracted further
+    # Todo: Make current_time() a property?
+    """
+    Interface for a clock object, with is expected to track time through integer milliseconds.
+
+    Methods:
+        current_time(self)
+            Returns the current time of this clock.
+
+        subscribe(self, delegate: IClockDelegate):
+            Subscribes a delegate to this clock.
+
+        unsubscribe(self, delegate: IClockDelegate):
+            Unsubscribes a delegate from this clock.
+
+        unsubscribe_all(self, delegate: IClockDelegate):
+            Unsubscribes all delegates from this clock.
+
+        advance_time_by(self, delta_time)
+            Sets time to current_time + delta_time.
+
+        set_time_to(self, time)
+            Sets the time of this clock and informs subscribers
+
+    """
     def current_time(self):
+        """
+        Returns the current time of this clock,
+        :return: int
+        """
         raise NotImplementedError
 
     def subscribe(self, delegate: IClockDelegate):
+        """
+        Subscribes a delegate to this clock.
+        :param delegate: IClockDelegate
+        :return: None
+        """
         raise NotImplementedError
 
     def unsubscribe(self, delegate: IClockDelegate):
+        """
+        Unsubscribes a delegate from this clock
+        :param delegate: IClockDelegate
+        :return: None
+        """
         raise NotImplementedError
 
     def unsubscribe_all(self):
+        """
+        Unsubscribes all delegates from this clock
+        :return: None
+        """
         raise NotImplementedError
 
     def advance_time_by(self, delta_time):
+        """
+        Sets the time to current_time() + delta_time.
+        :param delta_time: int
+        :return: None
+        """
         raise NotImplementedError
 
     def set_time_to(self, time):
+        """
+        Sets the time to the given time.
+        :param time: int
+        :return: None
+        """
         raise NotImplementedError
 
 
@@ -81,12 +140,14 @@ class Clock(IClock):
 
     def current_time(self):
         """
+        Inherited from IClock
         :return: int
         """
         return self._current_time
 
     def subscribe(self, delegate: IClockDelegate):
         """
+        Inherited from IClock
         :param delegate: IClockDelegate
         :return: None
         """
@@ -97,6 +158,7 @@ class Clock(IClock):
 
     def unsubscribe(self, delegate: IClockDelegate):
         """
+        Inherited from IClock
         :param delegate: IClockDelegate
         :return: None
         """
@@ -104,12 +166,14 @@ class Clock(IClock):
 
     def unsubscribe_all(self):
         """
+        Inherited from IClock
         :return: None
         """
         self._subscribers = []
 
     def advance_time_by(self, delta_time):
         """
+        Inherited from IClock
         :param delta_time: int
         :return: None
         """
@@ -117,6 +181,7 @@ class Clock(IClock):
 
     def set_time_to(self, time):
         """
+        Inherited from IClock
         :param time: int
         :return: None
         """
