@@ -11,18 +11,24 @@ class Currency:
     amount: float
         Amount of the currency
 
-    ticker: str
+    ticker: any # Todo replace with "equatable" equivalent when I figure out what the proper name is
         A ticker used to identify which currency the object represents
+
+    burned: boolean
+        If the currency has been "burned" or "spent".
 
     Methods:
         validate(self, ticker): Bool
-            Returns true if and only if the given ticker is equal to this currencies ticker
+            Returns true if and only if the given ticker is equal to this currencies ticker.
 
         assert_ticker(self, ticker)
-            Throws an IncorrectTickerException if self.validate(ticker) is False
+            Throws an IncorrectTickerException if self.validate(ticker) is False.
+
+        burn(self)
+            Burns this currency.
     """
 
-    def __init__(self, amount, ticker):
+    def __init__(self, amount: float, ticker):
         self.__amount = amount
         self.__ticker = ticker
         self.__burned = False
@@ -64,6 +70,10 @@ class Currency:
             raise IncorrectTickerException
 
     def burn(self):
+        """
+        Burns this currency
+        :return: None
+        """
         self.__burned = True
 
 
@@ -77,6 +87,11 @@ class ICurrencyDeposit:
     """
 
     def deposit_currency(self, currency: Currency):
+        """
+        Deposit currency into this object
+        :param currency: Currency
+        :return: None
+        """
         raise NotImplementedError
 
 
@@ -192,6 +207,11 @@ def _check_negative(amount):
 
 
 def _check_burned(currency: Currency):
+    """
+    Raises an exception if the currency is already burned
+    :param currency: Currency
+    :return: None
+    """
     if currency.burned:
         raise BurnedCurrencyException
 
