@@ -23,14 +23,27 @@ class Currency:
     """
 
     def __init__(self, amount, ticker):
-        self.amount = amount
-        self.ticker = ticker
+        self.__amount = amount
+        self.__ticker = ticker
+        self.__burned = False
+
+    @property
+    def amount(self):
+        return self.__amount
+
+    @property
+    def ticker(self):
+        return self.__ticker
+
+    @property
+    def burned(self):
+        return self.__burned
 
     def __eq__(self, other):
         return self.amount == other.amount and self.ticker == other.ticker
 
     def __str__(self):
-        return str(self.ticker) + ": " + str(self.amount)
+        return f"{self.ticker}: {self.amount}"
 
     def validate(self, ticker):
         """
@@ -49,6 +62,9 @@ class Currency:
         """
         if self.validate(ticker) is False:
             raise IncorrectTickerException
+
+    def burn(self):
+        self.__burned = True
 
 
 class ICurrencyDeposit:
@@ -161,6 +177,10 @@ class NegativeCurrencyException(Exception):
     pass
 
 
+class BurnedCurrencyException(Exception):
+    pass
+
+
 def _check_negative(amount):
     """
     Checks if the amount is negative. If so, throws a NegativeCurrencyException
@@ -169,6 +189,11 @@ def _check_negative(amount):
     """
     if amount < 0:
         raise NegativeCurrencyException
+
+
+def _check_burned(currency: Currency):
+    if currency.burned:
+        raise BurnedCurrencyException
 
 
 class Wallet(IWallet):
@@ -244,6 +269,7 @@ class Wallet(IWallet):
         :raises: UnsupportedCurrencyException
         """
         _check_negative(currency.amount)
+        _check_burned(currency)
         try:
             self.__wallet[currency.ticker] += currency.amount
         except KeyError:
@@ -252,6 +278,7 @@ class Wallet(IWallet):
             else:
                 self.__wallet[currency.ticker] = 0
                 self.deposit_currency(currency)  # Recursion dumb? DRY but not KISS
+        currency.burn()
 
     def check_balance(self, ticker):
         """
