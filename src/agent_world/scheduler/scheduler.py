@@ -8,36 +8,36 @@ class Scheduler(IScheduler, IClockDelegate):
 
     Extends
 
-    IScheduler
+        IScheduler, IClockDelegate
 
     Attributes
 
-    current_time: int
-        The current in-world time
+        current_time: int
+            The current in-world time
 
-    _queue: _SchedulerQueue
-        Queue used to store scheduled events
+        _queue: _SchedulerQueue
+            Queue used to store scheduled events
 
     Methods
 
-    schedule_event(event: ScheduledEvent) -> None
-        If the event is scheduled for the future it is added to the queue of events
+        schedule_event(event: ScheduledEvent) -> None
+            If the event is scheduled for the future it is added to the queue of events
 
-    cancel_event(identifier: Equatable) -> None
-        Removes the event corresponding to the given identifier from the schedule
+        cancel_event(identifier: Equatable) -> None
+            Removes the event corresponding to the given identifier from the schedule
 
-    current_time() -> int
-        Returns the current time
+        current_time() -> int
+            Returns the current time
 
-    schedule_events(events: [ScheduledEvent]) -> None
-        Iteratively schedules all events contained in the list as per schedule_event()
+        schedule_events(events: [ScheduledEvent]) -> None
+            Iteratively schedules all events contained in the list as per schedule_event()
 
-    advance_time_to(time: int) -> None
-        If the given time is greater than the current time, the current time is set to the time and all events
-        scheduled up to and including that time are executed in order
+        advance_time_to(time: int) -> None
+            If the given time is greater than the current time, the current time is set to the time and all events
+            scheduled up to and including that time are executed in order
 
-    advance_time_by(time: int) -> None
-        Calls advance_time_to(current_time + time) i.e. advances time by the given time
+        advance_time_by(time: int) -> None
+            Calls advance_time_to(current_time + time) i.e. advances time by the given time
     """
 
     def __init__(self, current_time=0):
@@ -49,6 +49,7 @@ class Scheduler(IScheduler, IClockDelegate):
 
     def schedule_event(self, event):
         """
+        Inherited from IScheduler
         :param event: ScheduledEvent
         :return: None
         """
@@ -57,6 +58,7 @@ class Scheduler(IScheduler, IClockDelegate):
 
     def cancel_event(self, identifier):
         """
+        Inherited from IScheduler
         :param identifier: Equatable
         :return: None
         """
@@ -64,12 +66,14 @@ class Scheduler(IScheduler, IClockDelegate):
 
     def current_time(self):
         """
+        Inherited from IScheduler
         :return: int
         """
         return self._current_time
 
     def schedule_events(self, events):
         """
+        Inherited from IScheduler
         :param events: [ScheduledEvent]
         :return: None
         """
@@ -79,6 +83,7 @@ class Scheduler(IScheduler, IClockDelegate):
 
     def set_time(self, time):
         """
+        Sets the time of this scheduler.
         :param time: int
         :return: None
         """
@@ -86,35 +91,6 @@ class Scheduler(IScheduler, IClockDelegate):
             self._current_time = time
             for event in self._queue.timed_iter(time):
                 event.scheduled_event()
-
-
-class ScheduledEvent:
-    """
-    A class representing an action or event related to the world being simulated
-
-    Attributes
-
-    scheduled_event: lambda
-        Function corresponding to the action/event to be executed at the scheduled time
-
-    scheduled_time: int
-        Time in milliseconds when the event should be executed
-
-    identifier: Equatable = None
-        An identifier for the scheduled event, currently the concern of the implementation. Ideally this should be
-        unique and lightweight, such as a string, integer or data class.
-
-    """
-
-    def __init__(self, scheduled_event, scheduled_time, identifier=None):
-        """
-        :param scheduled_event: lambda
-        :param scheduled_time: int
-        :param identifier: Equatable
-        """
-        self.scheduled_event = scheduled_event
-        self.scheduled_time = scheduled_time
-        self.identifier = identifier
 
 
 class _SchedulerQueue:
@@ -164,14 +140,14 @@ class _SchedulerQueue:
     """
 
     def __init__(self):
-        """
-        """
         self.first = None
 
     # Various adds
 
     def add_event(self, event):
         """
+        Adds event of scheduled time T to the linked list at the spot after the most recent event added which also has
+        the time T
         :param event: ScheduledEvent
         :return: None
         """
@@ -187,6 +163,7 @@ class _SchedulerQueue:
 
     def add_all(self, list_of_events):
         """
+        Adds all events contained in the list consecutively as per the add_event method
         :param list_of_events: [ScheduledEvent]
         :return: None
         """
@@ -197,6 +174,8 @@ class _SchedulerQueue:
 
     def remove_event(self, identifier):
         """
+        Removes the event of the given identifier from the list. If there are multiple occurrences of the
+        same identifier, the first occurrence will be removed
         :param identifier: Equatable
         :return: None
         """
@@ -219,6 +198,8 @@ class _SchedulerQueue:
 
     def peak_first(self):
         """
+        Returns the first ScheduledEvent of the linked list without removing it from the list.
+        If the list is empty, returns None
         :return: ScheduledEvent?
         """
         if self.first:
@@ -226,6 +207,7 @@ class _SchedulerQueue:
 
     def pop(self):
         """
+        Pops the first object from the list. If the list is empty, returns None
         :return: ScheduledEvent?
         """
         if self.first is None:
@@ -236,6 +218,7 @@ class _SchedulerQueue:
 
     def size(self):
         """
+        Returns the size of the linked list
         :return: int
         """
         current = self.first
@@ -249,12 +232,14 @@ class _SchedulerQueue:
 
     def is_not_empty(self):
         """
+        Returns true if the list is not empty
         :return: Boolean
         """
         return self.first is not None
 
     def is_empty(self):
         """
+        Returns true if the list is empty
         :return: Boolean
         """
         return self.first is None
@@ -281,6 +266,8 @@ class _SchedulerQueue:
 
     def timed_iter(self, end_time):
         """
+        Returns an iterator which iterates over all events up to and including the given time 'destructively', i.e.
+        the elements are popped from the list as they are iterated over.
         :param end_time: int
         :return: _FixedTimeIterator
         """
@@ -374,6 +361,7 @@ class _Node:
 
     def set_next(self, node):
         """
+        Sets _next = node
         :param node: _Node?
         :return: None
         """
@@ -381,24 +369,28 @@ class _Node:
 
     def timestamp(self):
         """
+        returns the scheduled time for the ScheduledEvent contained in the node
         :return: int
         """
         return self._content.scheduled_time
 
     def has_next(self):
         """
+        Returns true if this node has a _next
         :return: Boolean
         """
         return self._next is not None
 
     def next(self):
         """
+        Returns the _next field, which is either a _Node or None
         :return: _Node?
         """
         return self._next
 
     def get_content(self):
         """
+        Returns the scheduled event contained in the node
         :return: ScheduledEvent
         """
         return self._content
