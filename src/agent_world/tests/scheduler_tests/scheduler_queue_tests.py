@@ -1,5 +1,6 @@
 import unittest
-from src.agent_world.scheduler.scheduler import _SchedulerQueue, ScheduledEvent
+from src.agent_world.scheduler.scheduler import _SchedulerQueue
+from src.agent_world.scheduler.IScheduler import ScheduledEvent
 from src.agent_world.tests.scheduler_tests.test_helpers import _generate_sequential_events
 
 
