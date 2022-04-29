@@ -1,4 +1,5 @@
-from src.agent_world.scheduler.scheduler import ScheduledEvent, Scheduler
+from src.agent_world.scheduler.scheduler import Scheduler
+from src.agent_world.scheduler.IScheduler import ScheduledEvent
 
 
 def _generate_sequential_events(num):
