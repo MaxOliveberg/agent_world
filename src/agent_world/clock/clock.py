@@ -14,8 +14,9 @@ class IClockDelegate:
         set_time(self, time)
             Sets the time of this delegate
     """
+
     def set_time(self, time):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class IClock:
@@ -44,12 +45,13 @@ class IClock:
             Sets the time of this clock and informs subscribers
 
     """
+
     def current_time(self):
         """
         Returns the current time of this clock,
         :return: int
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def subscribe(self, delegate: IClockDelegate):
         """
@@ -57,7 +59,7 @@ class IClock:
         :param delegate: IClockDelegate
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def unsubscribe(self, delegate: IClockDelegate):
         """
@@ -65,14 +67,14 @@ class IClock:
         :param delegate: IClockDelegate
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def unsubscribe_all(self):
         """
         Unsubscribes all delegates from this clock
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def advance_time_by(self, delta_time):
         """
@@ -80,7 +82,7 @@ class IClock:
         :param delta_time: int
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def set_time_to(self, time):
         """
@@ -88,7 +90,7 @@ class IClock:
         :param time: int
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class Clock(IClock):
@@ -169,7 +171,7 @@ class Clock(IClock):
         Inherited from IClock
         :return: None
         """
-        self._subscribers = []
+        self._subscribers.clear()
 
     def advance_time_by(self, delta_time):
         """

@@ -32,6 +32,11 @@ def test_withdrawal():
     currency = wallet.withdraw(5, "USD")
     assert Currency(5, "USD") == currency
     assert 5 == wallet.check_balance("USD")
+    assert 0 == wallet.check_balance("SEK")
+
+    whitelist_wallet = Wallet(["USD"])
+    with pytest.raises(UnsupportedCurrencyException):
+        whitelist_wallet.check_balance("SEK")
 
 
 def test_invalid_withdrawal_whitelist():
@@ -67,3 +72,27 @@ def test_subtract():
     wallet.subtract({"USD": 1, "SEK": 1})
     assert 1 == wallet.check_balance("USD")
     assert 1 == wallet.check_balance("SEK")
+    with pytest.raises(InsufficientBalanceException):
+        wallet.subtract({"USD": 2, "SEK": 2})
+
+
+def test_withdraw_all_currencies():
+    wallet = Wallet()
+    empty_list = wallet.withdraw_all_currencies()
+    assert len(empty_list) == 0
+
+    wallet.deposit_currency(Currency(1, "USD"))
+    wallet.deposit_currency(Currency(1, "SEK"))
+    some_money = wallet.withdraw_all_currencies()
+    assert len(some_money) == 2
+
+    no_money = wallet.withdraw_all_currencies()
+    assert len(no_money) == 0
+
+
+def test_withdraw_all():
+    wallet = Wallet()
+    wallet.deposit_currency(Currency(10, "USD"))
+    my_dollars = wallet.withdraw_all("USD")
+    assert my_dollars.ticker == "USD" and my_dollars.amount == 10
+    assert wallet.check_balance("USD") == 0
