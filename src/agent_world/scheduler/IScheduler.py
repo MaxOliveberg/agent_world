@@ -50,7 +50,7 @@ class IScheduler:
         Returns the  current time of this scheduler
         :return: int
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def schedule_event(self, event: ScheduledEvent):
         """
@@ -58,14 +58,14 @@ class IScheduler:
         :param event: ScheduledEvent
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def schedule_events(self, events):
         """
         :param events: [ScheduledEvent]
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def cancel_event(self, identifier):
         """
@@ -73,4 +73,4 @@ class IScheduler:
         :param identifier: equatable
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover

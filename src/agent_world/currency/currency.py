@@ -29,6 +29,7 @@ class Currency:
     """
 
     def __init__(self, amount: float, ticker):
+        _check_negative(amount)
         self.__amount = amount
         self.__ticker = ticker
         self.__burned = False
@@ -49,7 +50,7 @@ class Currency:
         return self.amount == other.amount and self.ticker == other.ticker
 
     def __str__(self):
-        return f"{self.ticker}: {self.amount}"
+        return f"{self.ticker}: {self.amount}"  # pragma: no cover
 
     def validate(self, ticker):
         """
@@ -92,7 +93,7 @@ class ICurrencyDeposit:
         :param currency: Currency
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class IWallet(ICurrencyDeposit):
@@ -129,7 +130,7 @@ class IWallet(ICurrencyDeposit):
         :param currency: Currency
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def check_balance(self, ticker):
         """
@@ -137,7 +138,7 @@ class IWallet(ICurrencyDeposit):
         :param ticker: Any
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def withdraw(self, amount, ticker):
         """
@@ -146,7 +147,7 @@ class IWallet(ICurrencyDeposit):
         :param ticker: Any
         :return: Currency
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def withdraw_all(self, ticker):
         """
@@ -154,14 +155,14 @@ class IWallet(ICurrencyDeposit):
         :param ticker: Any
         :return: Currency
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def withdraw_all_currencies(self):
         """
         Withdraws all currencies contained in this wallet.
         :return: [Currency]
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def can_afford(self, price: dict):
         """
@@ -169,7 +170,7 @@ class IWallet(ICurrencyDeposit):
         :param price: dict
         :return: Bool
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def subtract(self, price: dict):
         """
@@ -177,7 +178,7 @@ class IWallet(ICurrencyDeposit):
         :param price: dict
         :return: None
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class InsufficientBalanceException(Exception):

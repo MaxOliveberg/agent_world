@@ -11,6 +11,12 @@ class ToySubscriber(IClockDelegate):
         self._current_time = time
 
 
+def test_fundamental():
+    clock = Clock(starting_time=1)
+    assert 1 == clock.current_time()
+    assert len(clock._subscribers) == 0
+
+
 def test_set_time():
     clock = Clock()
     clock.set_time_to(1)
@@ -58,6 +64,16 @@ def test_remove_subscribe():
     assert toy_subscriber in clock._subscribers
     clock.unsubscribe(toy_subscriber)
     assert toy_subscriber not in clock._subscribers
+
+
+def test_unsubscribe_all():
+    clock = Clock()
+    toy_subscribers = [ToySubscriber() for _ in range(10)]
+    for sub in toy_subscribers:
+        clock.subscribe(sub)
+    assert len(clock._subscribers) == 10
+    clock.unsubscribe_all()
+    assert len(clock._subscribers) == 0
 
 
 def test_set_time_subscriber():
